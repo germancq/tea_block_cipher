@@ -38,13 +38,13 @@ async def rst_function_test(dut):
     print("rst function")
     dut.rst.value = 1
     await n_cycles_clock(dut, 1)
-    assert (
-        dut.current_state.value == dut.IDLE.value
+    assert int(dut.current_state.value) == int(
+        dut.IDLE.value
     ), f"ERROR STATE IN IDLE, STATE={dut.current_state.value}"
     await n_cycles_clock(dut, 5)
 
-    assert (
-        dut.current_state.value == dut.IDLE.value
+    assert int(dut.current_state.value) == int(
+        dut.IDLE.value
     ), f"ERROR STATE IN IDLE, STATE={dut.current_state.value}"
 
     dut.rst.value = 0
@@ -54,8 +54,8 @@ async def reg_input_test(dut, expected_y, expected_z, expected_sum):
     print("reg input test")
     dut.start.value = 1
     await n_cycles_clock(dut, 1)
-    assert (
-        dut.current_state.value == dut.REG_INPUTS.value
+    assert int(dut.current_state.value) == int(
+        dut.REG_INPUTS.value
     ), f"ERROR STATE IN REG_INPUTS, STATE={dut.current_state.value}"
     assert (
         dut.sum_reg_din.value == expected_sum
@@ -78,8 +78,8 @@ async def round_enc_test(dut, rnd, expected_y, expected_z, expected_sum):
     print("round_enc_test")
     print("rnd")
     await n_cycles_clock(dut, 1)
-    assert (
-        dut.current_state.value == dut.ROUND_ENC.value
+    assert int(dut.current_state.value) == int(
+        dut.ROUND_ENC.value
     ), f"ERROR STATE IN ROUND_ENC, STATE={dut.current_state.value}"
     assert (
         dut.sum_reg_din.value == expected_sum
@@ -107,8 +107,8 @@ async def round_enc_test(dut, rnd, expected_y, expected_z, expected_sum):
 async def end_enc_test(dut, expected_result):
     print("end_enc_test")
     await n_cycles_clock(dut, 1)
-    assert (
-        dut.current_state.value == dut.END_ENC.value
+    assert int(dut.current_state.value) == int(
+        dut.END_ENC.value
     ), f"ERROR STATE IN END_ENC, STATE={dut.current_state.value}"
     assert (
         dut.block_o.value == expected_result
