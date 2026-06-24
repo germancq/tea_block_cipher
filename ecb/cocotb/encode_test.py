@@ -14,7 +14,6 @@ import cocotb
 import numpy as np
 import tea
 from cocotb.clock import Clock
-from cocotb.regression import TestFactory
 from cocotb.triggers import FallingEdge, RisingEdge, Timer
 
 CLK_PERIOD = 20
@@ -22,7 +21,7 @@ CLK_PERIOD = 20
 
 def setup_dut(dut, blk_i, key):
     print("setup block cipher")
-    cocotb.fork(Clock(dut.clk, CLK_PERIOD).start())
+    cocotb.start_soon(Clock(dut.clk, CLK_PERIOD, unit="ns").start())
     dut.rst.value = 0
     dut.start.value = 0
     dut.key.value = key
@@ -120,6 +119,7 @@ async def end_enc_test(dut, expected_result):
 
 
 @cocotb.test()
+@cocotb.parametrize(index=range(0, 10))
 async def test(dut, index=0):
 
     key = random.getrandbits(128)
@@ -141,10 +141,3 @@ async def test(dut, index=0):
         await round_enc_test(dut, i, y, z, sum_var)
 
     await end_enc_test(dut, expected_result)
-
-
-n = 10
-factory = TestFactory(test)
-
-factory.add_option("index", range(0, n))
-factory.generate_tests()
